@@ -16,9 +16,10 @@ variable "force_destroy" {
   default = "true"
 }
 
-variable "project" {
-  type = string
-  description = "Name of the project, used for tagging."
+variable "tags" {
+  description = "Tags to set on the bucket and cloudfront distribution."
+  type        = map(string)
+  default     = {}
 }
 
 variable "website_root" {

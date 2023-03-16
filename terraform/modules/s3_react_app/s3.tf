@@ -1,15 +1,12 @@
-# Create the bucket
+# Create the bucket to host the web app
 resource "aws_s3_bucket" "app_bucket" {
   bucket        = var.bucket_name
-  force_destroy = true
+  force_destroy = var.force_destroy
 
-  tags = {
-    Project     = "aws-hosted-react"
-    Environment = "${var.environment}"
-  }
+  tags = var.tags
 }
 
-# Block public access
+# Block public access, we will expose the web app through cloudfront
 resource "aws_s3_bucket_public_access_block" "block_public_access" {
   bucket = aws_s3_bucket.app_bucket.id
 
@@ -19,7 +16,7 @@ resource "aws_s3_bucket_public_access_block" "block_public_access" {
   restrict_public_buckets = true
 }
 
-# Add the website files
+# Add the website files to the bucket
 module "website_files" {
   source   = "hashicorp/dir/template"
   base_dir = var.website_root
